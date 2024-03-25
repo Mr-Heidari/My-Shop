@@ -1,5 +1,5 @@
 export default function HomePage(){
     return(
-        <div>Home</div>
+        <div className=" absolute top-20 left-1/2">Home</div>
     )
 }

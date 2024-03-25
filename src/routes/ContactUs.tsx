@@ -1,5 +1,5 @@
 export default function ContactPage(){
     return(
-        <div>ContactUss</div>
+        <div className=" absolute top-20">ContactUss</div>
     )
 }

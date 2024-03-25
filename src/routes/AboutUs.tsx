@@ -1,5 +1,5 @@
 export default function AboutPage(){
     return(
-        <div>AboutUS</div>
+        <div className=" absolute top-20">AboutUS</div>
     )
 }

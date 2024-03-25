@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        index: true,
+        path:"/My-Shop/Home",
         loader: async () => {
           const x=await (await fetch("https://farawin.iran.liara.run/api/user"))
             .json()
