@@ -8,28 +8,33 @@ import AboutPage from "./routes/AboutUs";
 import ContactPage from "./routes/ContactUs";
 const router = createBrowserRouter([
   {
-    path: "/My-Shop/Home",
+    path: "/My-Shop",
     element: <Layout />,
     children: [
       {
         path:"/My-Shop/Home",
+        index: true,
         loader: async () => {
-          const x=await (await fetch("https://farawin.iran.liara.run/api/user"))
+          const x = await (
+            await fetch("https://farawin.iran.liara.run/api/user")
+          )
             .json()
             .then((x) => x.userList);
-            console.log(x)
-            return x
+          console.log(x);
+          return x;
         },
         element: <HomePage />,
       },
       {
         path: "/My-Shop/Products",
-        loader:async ()=>{
-          const x=await (await fetch("https://farawin.iran.liara.run/api/user"))
+        loader: async () => {
+          const x = await (
+            await fetch("https://farawin.iran.liara.run/api/user")
+          )
             .json()
             .then((x) => x.userList);
-            console.log(x)
-            return x
+          console.log(x);
+          return x;
         },
         element: <ProductPage />,
       },
