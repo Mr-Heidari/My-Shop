@@ -8,7 +8,7 @@ import AboutPage from "./routes/AboutUs";
 import ContactPage from "./routes/ContactUs";
 const router = createBrowserRouter([
   {
-    path: "/My-Shop",
+    path: "/My-Shop/Home",
     element: <Layout />,
     children: [
       {
