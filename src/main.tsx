@@ -12,30 +12,11 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path:"/My-Shop/Home",
-        index: true,
-        loader: async () => {
-          const x = await (
-            await fetch("https://farawin.iran.liara.run/api/user")
-          )
-            .json()
-            .then((x) => x.userList);
-          console.log(x);
-          return x;
-        },
+        path: "/My-Shop/Home",
         element: <HomePage />,
       },
       {
         path: "/My-Shop/Products",
-        loader: async () => {
-          const x = await (
-            await fetch("https://farawin.iran.liara.run/api/user")
-          )
-            .json()
-            .then((x) => x.userList);
-          console.log(x);
-          return x;
-        },
         element: <ProductPage />,
       },
       {

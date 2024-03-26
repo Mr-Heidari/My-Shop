@@ -23,16 +23,25 @@ export default function Layout() {
   useEffect(() => {
     location;
   }, [location]);
-  
+
   return (
-    <>
+    <div className="">
       <button
         className="bg-menuIcone w-10 h-10 left-3 top-3 absolute bg-contain sm:hidden"
         onClick={() => {
           setNavMenuVisible(true);
         }}
       ></button>
-      <div className="absolute w-11/12 left-5 top-[60px] h-[3px] bg-Onyx/85 sm:hidden"></div>
+      <div className="absolute w-11/12 left-5 top-[60px] h-[3px] bg-Onyx/95 sm:hidden"></div>
+      <div
+        className={
+          "absolute w-full h-screen bg-Onyx/30" +
+          (navMenuVisible ? " " : " hidden")
+        }
+        onClick={() => {
+          setNavMenuVisible(false);
+        }}
+      ></div>
       <button
         className={
           "absolute bg-backArrowIcone w-7 h-7 bg-contain left-[200px] z-10 sm:hidden" +
@@ -50,7 +59,7 @@ export default function Layout() {
       ></div>
       <div
         className={
-          "absolute max-sm:flex flex-col max-sm:h-52 max-sm:top-10 justify-between min-w-[600px] w-2/5 h-fit top-5 left-10" +
+          "absolute max-sm:flex flex-col max-sm:h-52  max-sm:top-10 justify-between sm:min-w-[600px] w-2/5 h-fit top-5 left-10" +
           (navMenuVisible ? " " : " max-sm:hidden")
         }
       >
@@ -126,6 +135,6 @@ export default function Layout() {
         }
       ></div>
       <Outlet />
-    </>
+    </div>
   );
 }
