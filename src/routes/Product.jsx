@@ -10,16 +10,24 @@ export default function ProductPage() {
   const [imgLoad, setImgLoad] = useState(false);
   return (
     <div>
-      <div className=" bg-cartIcone "></div>
-    <div className=" absolute h-screen w-full top-28">
-      <Slider></Slider>
-      <button
-        onClick={async () => {
-          imgSrc();
-        }}
-      ></button>
-      <div className={"w-fit" + (!imgLoad ? " bg-Onyx" : " bg-transparent")}>
-        {/* <img
+      {/** cartIcone container */}
+      <div>
+      <span className=" bg-cartIcone w-14 h-14 bg-contain absolute right-10 top-4">
+        <p className="absolute right-14 text-2xl font-semibold font-mono text-Onyx top-4">
+          cart
+        </p>
+      </span>
+      </div>
+      <div></div>
+      <div className=" absolute h-screen w-full top-28">
+        <Slider></Slider>
+        <button
+          onClick={async () => {
+            imgSrc();
+          }}
+        ></button>
+        <div className={"w-fit" + (!imgLoad ? " bg-Onyx" : " bg-transparent")}>
+          {/* <img
           src={src.image}
           onLoad={() => {
             setImgLoad(true);
@@ -27,8 +35,8 @@ export default function ProductPage() {
           className="w-96 h-96 bg-contain"
           alt=""
         /> */}
+        </div>
       </div>
-    </div>
     </div>
   );
 }
