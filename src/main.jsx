@@ -6,6 +6,7 @@ import HomePage from "./routes/Home";
 import ProductPage from "./routes/Product";
 import AboutPage from "./routes/AboutUs";
 import ContactPage from "./routes/ContactUs";
+import { imgSrc as loader } from "./routes/Product";
 const router = createBrowserRouter([
   {
     path: "/My-Shop",
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/My-Shop/Products",
+        loader:loader,
         element: <ProductPage />,
       },
       {
@@ -30,6 +32,6 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <RouterProvider router={router} />
 );

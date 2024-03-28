@@ -65,6 +65,17 @@ export default {
         buyCart: "url('/src/assets/buyCart.png')",
         menuIcone: "url('/src/assets/menuIcone.svg')",
         backArrowIcone: "url('/src/assets/backArrowIcone.svg')",
+        slider1: "url('/src/assets/slider/happy-young-woman.png')",
+        slider2:
+          "url('/src/assets/slider/influencer-with-headphones-using-phone-taking-selfie-recording-podcast-series-audience-air-online-production-internet-broadcast-show-host-streaming-live-content-digital-social-media.png')",
+        slider3:
+          "url('/src/assets/slider/man-making-music-bedroom-medium-shot.png')",
+        slider4: "url('/src/assets/slider/model-career-kit-still-life.png')",
+        slider5:
+          "url('/src/assets/slider/young-handsome-man-choosing-shoes-shop.png')",
+        leftArrow: "url('/src/assets/leftarrow.svg')",
+        rightArrow: "url('/src/assets/rightarrow.svg')",
+        cartIcone: "url('/src/assets/cartIcone.svg')",
       },
     },
   },

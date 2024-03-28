@@ -35,8 +35,8 @@ export default function Layout() {
       <div className="absolute w-11/12 left-5 top-[60px] h-[3px] bg-Onyx/95 sm:hidden"></div>
       <div
         className={
-          "absolute w-full h-screen bg-Onyx/30" +
-          (navMenuVisible ? " " : " hidden")
+          "absolute w-full h-screen bg-Onyx/30 sm:hidden" +
+          (navMenuVisible ? " " : " hidden ")
         }
         onClick={() => {
           setNavMenuVisible(false);
@@ -59,7 +59,7 @@ export default function Layout() {
       ></div>
       <div
         className={
-          "absolute max-sm:flex flex-col max-sm:h-52  max-sm:top-10 justify-between sm:min-w-[600px] w-2/5 h-fit top-5 left-10" +
+          "absolute max-sm:flex flex-col max-sm:h-52  max-sm:top-10 justify-between sm:min-w-[600px] w-2/5 h-fit top-5 left-10 " +
           (navMenuVisible ? " " : " max-sm:hidden")
         }
       >
