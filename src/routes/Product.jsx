@@ -1,41 +1,80 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useLoaderData } from "react-router-dom";
 export const imgSrc = async () => {
-  return await fetch("https://fakestoreapi.com/products/1").then((res) =>
+  return await fetch("https://fakestoreapi.com/products?limit=5").then((res) =>
     res.json()
   );
 };
 export default function ProductPage() {
-  const src = useLoaderData();
-  const [imgLoad, setImgLoad] = useState(false);
+  const products = useLoaderData();
+  //************************************** */
+  const [items, setItems] = useState([
+    {
+      id: "",
+      title: "",
+    },
+  ]);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [index, setIndex] = useState(10);
+
+  const fetchData = useCallback(async () => {
+    if (isLoading) return;
+
+    setIsLoading(true);
+
+    await (
+      await fetch(`https://fakestoreapi.com/products?limit=${index}`)
+    )
+      .json()
+      .then((items) => {
+        setItems(items);
+      })
+
+      .catch((err) => console.log(err));
+    setIndex((prevIndex) => prevIndex + 5);
+
+    setIsLoading(false);
+  }, [isLoading, index]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, clientHeight, scrollHeight } =
+        document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 20) {
+        fetchData();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [fetchData]);
+
+  //*********************************** */
+  // const [imgLoad, setImgLoad] = useState(false);
   return (
     <div>
       {/** cartIcone container */}
       <div>
-      <span className=" bg-cartIcone w-14 h-14 bg-contain absolute right-10 top-4">
-        <p className="absolute right-14 text-2xl font-semibold font-mono text-Onyx top-4">
-          cart
-        </p>
-      </span>
+        <span className=" bg-cartIcone w-12 h-12 bg-contain absolute right-10 top-4">
+          <p className="absolute right-12 leading-5 text-sm font-semibold font-serif text-Onyx top-1">
+            your Cart
+          </p>
+        </span>
       </div>
-      <div></div>
+
       <div className=" absolute h-screen w-full top-28">
         <Slider></Slider>
-        <button
-          onClick={async () => {
-            imgSrc();
-          }}
-        ></button>
-        <div className={"w-fit" + (!imgLoad ? " bg-Onyx" : " bg-transparent")}>
-          {/* <img
-          src={src.image}
-          onLoad={() => {
-            setImgLoad(true);
-          }}
-          className="w-96 h-96 bg-contain"
-          alt=""
-        /> */}
-        </div>
+      </div>
+      {/** products container */}
+      <div>
+        <div></div>
+        <ProductsContainer
+          products={items.length > products.length ? items : products}
+        ></ProductsContainer>
       </div>
     </div>
   );
@@ -155,6 +194,18 @@ function Slider() {
           slider[index]
         }
       ></div>
+    </div>
+  );
+}
+
+function ProductsContainer(props) {
+  return (
+    <div className="absolute top-[95%]  w-full h-fit">
+      <div>
+        {props.products.map((x) => (
+          <div key={x.id}>{x.price}</div>
+        ))}
+      </div>
     </div>
   );
 }

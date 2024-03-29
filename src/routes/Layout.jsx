@@ -59,7 +59,7 @@ export default function Layout() {
       ></div>
       <div
         className={
-          "absolute max-sm:flex flex-col max-sm:h-52  max-sm:top-10 justify-between sm:min-w-[600px] w-2/5 h-fit top-5 left-10 " +
+          "absolute max-sm:flex flex-col max-sm:h-52  max-sm:top-10 justify-between sm:min-w-[600px] w-2/5 h-fit top-5 left-10 font-mono" +
           (navMenuVisible ? " " : " max-sm:hidden")
         }
       >
