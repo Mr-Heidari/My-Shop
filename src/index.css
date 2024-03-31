@@ -1,6 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-body{
-    background-image: url(/src/assets/homebackground.jpg);
+body {
+  background-color:#E6E6EA ;
+}
+
+input[type=radio] {
+  
+  -webkit-appearance: none;
+  outline: 0.1em solid #393D3F;
+  outline-offset: 0.15em;
+}
+
+input[type=radio]:checked {
+  display: inline-block;
+  background-color: #393D3F;
 }

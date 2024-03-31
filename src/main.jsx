@@ -6,7 +6,7 @@ import HomePage from "./routes/Home";
 import ProductPage from "./routes/Product";
 import AboutPage from "./routes/AboutUs";
 import ContactPage from "./routes/ContactUs";
-import { imgSrc as loader } from "./routes/Product";
+import { products as loader } from "./loader";
 const router = createBrowserRouter([
   {
     path: "/My-Shop",

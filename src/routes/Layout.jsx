@@ -14,7 +14,7 @@ export default function Layout() {
     } else if (location.pathname === "/My-Shop/AboutUs") {
       return " w-[105px] left-[54%]";
     } else if (location.pathname === "/My-Shop/ContactUs") {
-      return " w-[120px] left-[83%]";
+      return " w-[129px] left-[81%]";
     } else if (location.pathname === "/My-Shop/Products") {
       return " w-[105px] left-[25%]";
     }
@@ -25,14 +25,15 @@ export default function Layout() {
   }, [location]);
 
   return (
-    <div className="">
+    <div className=" z-10">
+      <div className="w-[95%]  bg-Onyx/30 absolute left-1/2 -translate-x-1/2 top-28"></div>
       <button
-        className="bg-menuIcone w-10 h-10 left-3 top-3 absolute bg-contain sm:hidden"
+        className="bg-menuIcone w-10 h-10 left-[2.5%] top-3 absolute bg-contain sm:hidden"
         onClick={() => {
           setNavMenuVisible(true);
         }}
       ></button>
-      <div className="absolute w-11/12 left-5 top-[60px] h-[3px] bg-Onyx/95 sm:hidden"></div>
+      <div className="absolute w-[93%] -translate-x-1/2 left-1/2 top-[60px] h-[3px] bg-Onyx/95 sm:hidden"></div>
       <div
         className={
           "absolute w-full h-screen bg-Onyx/30 sm:hidden" +
@@ -59,7 +60,7 @@ export default function Layout() {
       ></div>
       <div
         className={
-          "absolute max-sm:flex flex-col max-sm:h-52  max-sm:top-10 justify-between sm:min-w-[600px] w-2/5 h-fit top-5 left-10 font-mono" +
+          "absolute max-sm:flex flex-col z-10 max-sm:h-52  max-sm:top-10 justify-between  sm:min-w-[500px] w-2/5 h-fit top-5 left-10 font-mono" +
           (navMenuVisible ? " " : " max-sm:hidden")
         }
       >
@@ -110,10 +111,10 @@ export default function Layout() {
             to="/My-Shop/ContactUs"
             className={({ isActive, isPending }) =>
               isPending
-                ? " text-Onyx left-[83%] sm:absolute bg-contactIcone bg-no-repeat pl-6  font-semibold text-xl"
+                ? " text-Onyx left-[81%] sm:absolute bg-contactIcone bg-no-repeat pl-6  font-semibold text-xl"
                 : isActive
-                ? " text-orange left-[83%] sm:absolute bg-contactIconeorange bg-no-repeat scale-110 pl-6 transition-all duration-300  font-semibold text-xl"
-                : " text-Onyx left-[83%] sm:absolute bg-contactIcone bg-no-repeat pl-6 transition-all duration-300   font-semibold text-xl"
+                ? " text-orange left-[81%] sm:absolute bg-contactIconeorange bg-no-repeat scale-110 pl-6 transition-all duration-300  font-semibold text-xl"
+                : " text-Onyx left-[81%] sm:absolute bg-contactIcone bg-no-repeat pl-6 transition-all duration-300   font-semibold text-xl"
             }
           >
             contactUs
@@ -125,7 +126,7 @@ export default function Layout() {
             navLinePosition()
           }
         ></div>
-        <div className="absolute min-w-[610px] w-full h-[1px] top-10 bg-Onyx max-sm:hidden"></div>
+        <div className="absolute  w-full h-[1px] sm:min-w-[520px]  top-10 bg-Onyx max-sm:hidden"></div>
       </div>
       <div
         className={
