@@ -85,6 +85,7 @@ export default {
         weomensIcone: "url('/src/assets/filterMenu/women.png')",
         jewerlyIcone: "url('/src/assets/filterMenu/jewerly.png')",
         digitalIcone: "url('/src/assets/filterMenu/electronics.png')",
+        starIcone: "url('/src/assets/productContainer/starIcone.svg')",
       },
     },
   },

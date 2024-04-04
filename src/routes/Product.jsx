@@ -1,54 +1,56 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useLoaderData } from "react-router-dom";
 
 export default function ProductPage() {
   const products = useLoaderData();
+  const [filtredProducts, setFiltredProducts] = useState(products);
+  //#region
 
   //implement inifinity scroll
 
-  // const [items, setItems] = useState([]);
+  const [items, setItems] = useState([]);
 
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // const [index, setIndex] = useState(10);
+  const [index, setIndex] = useState(10);
 
-  // const fetchData = useCallback(async () => {
-  //   if (isLoading) return;
-  //   setIsLoading(true);
-  //   await (
-  //     await fetch(`https://fakestoreapi.com/products?limit=${index}`)
-  //   )
-  //     .json()
-  //     .then((items) => {
-  //       setItems(items);
-  //     })
+  const fetchData = useCallback(async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    await (
+      await fetch(`https://fakestoreapi.com/products?limit=${index}`)
+    )
+      .json()
+      .then((items) => {
+        setItems(items);
+      })
 
-  //     .catch((err) => console.log(err));
-  //   setIndex((prevIndex) => prevIndex + 5);
+      .catch((err) => console.log(err));
+    setIndex((prevIndex) => prevIndex + 5);
 
-  //   setIsLoading(false);
-  // }, [isLoading, index]);
+    setIsLoading(false);
+  }, [isLoading, index]);
 
-  // //when user reach end of page render some products
+  //when user reach end of page render some products
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const { scrollTop, clientHeight, scrollHeight } =
-  //       document.documentElement;
-  //     if (scrollTop + clientHeight >= scrollHeight/2 ) {
-  //       fetchData();
-  //     }
-  //   };
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, clientHeight, scrollHeight } =
+        document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight / 2) {
+        fetchData();
+      }
+    };
 
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, [fetchData]);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [fetchData]);
 
-  //end of implementation/
+  //end of implementation
 
-  // const [imgLoad, setImgLoad] = useState(false);
+  //#endregion
   return (
     <div className="h-screen ">
       {/* <div className="w-[95%] -translate-x-1/2 left-1/2 min-h-full fixed -z-20 bg-bubble-gum/20 m-0 p-0"></div> */}
@@ -67,10 +69,11 @@ export default function ProductPage() {
         {/** products container */}
         <div className="relative h-fit w-full">
           <SortMenu></SortMenu>
-          <FilterMenu></FilterMenu>
-          <ProductsContainer
-            products={products}
-          ></ProductsContainer>
+          <FilterMenu
+            products={items.length > products.length ? items : products}
+            setProduct={setFiltredProducts}
+          ></FilterMenu>
+          <ProductsContainer products={filtredProducts}></ProductsContainer>
         </div>
       </div>
     </div>
@@ -194,15 +197,15 @@ function Slider() {
     </div>
   );
 }
-function FilterLine() {
-  return (
-    <div className="z-10 w-[95%] mt-10 max-md:mt-2 relative m-auto">
-      <div className="text-xl font-mono text-Onyx max-md:text-lg"> sortBy</div>
-      <div className="bg-Onyx w-full h-[3px]"></div>
-      <SortMenu></SortMenu>
-    </div>
-  );
-}
+// function FilterLine() {
+//   return (
+//     <div className="z-10 w-[95%] mt-10 max-md:mt-2 relative m-auto">
+//       <div className="text-xl font-mono text-Onyx max-md:text-lg"> sortBy</div>
+//       <div className="bg-Onyx w-full h-[3px]"></div>
+//       <SortMenu></SortMenu>
+//     </div>
+//   );
+// }
 function SortMenu() {
   const [sortBy, setSortBy] = useState("A-Z");
   return (
@@ -253,19 +256,86 @@ function SortMenu() {
     </div>
   );
 }
-function FilterMenu() {
+function FilterMenu(props) {
+  const [menProducts, setMenProducts] = useState([]);
+  const [womensProducts, setWomensProducts] = useState([]);
+  const [jeweleryProducts, setJeweleryProducts] = useState([]);
+  const [electronicsProducts, setElectronicsProducts] = useState([]);
   const [filters, setFilters] = useState({
     "men's clothing": false,
     "women's clothing": false,
     jewelery: false,
     electronics: false,
   });
+
+  const handleCategoriesFilters = () => {
+    if (filters["men's clothing"]) {
+      setMenProducts(
+        props.products.filter((product) => {
+          return product.category==="men's clothing";
+        })
+      );
+    } else {
+      setMenProducts([]);
+    }
+    if (filters["women's clothing"]) {
+      setWomensProducts(
+        props.products.filter((product) => {
+          return product.category==="women's clothing";
+        })
+      );
+    } else {
+      setWomensProducts([]);
+    }
+    if (filters.jewelery) {
+      setJeweleryProducts(
+        props.products.filter((product) => {
+          return product.category==="jewelery";
+        })
+      );
+    } else {
+      setJeweleryProducts([]);
+    }
+    if (filters.electronics) {
+      setElectronicsProducts(
+        props.products.filter((product) => {
+          return product.category==="electronics";
+        })
+      );
+    } else {
+      setElectronicsProducts([]);
+    }
+    
+    if (
+      !filters["men's clothing"] &&
+      !filters["women's clothing"] &&
+      !filters.electronics &&
+      !filters.jewelery
+    ) {
+      props.setProduct(props.products);
+      console.log('allafalse')
+    } else {
+      const temp=[]
+      const concatArray =temp.concat(menProducts,
+        womensProducts,
+        jeweleryProducts,
+        electronicsProducts
+      );
+      props.setProduct(concatArray);
+    }
+  };
+  useEffect(() => {
+    const interval = setInterval(handleCategoriesFilters, 100);
+    return () => clearInterval(interval);
+  });
   return (
     <div
       name="container"
       className="w-[20%] mt-4 h-fit max-md:w-[90%] max-md:mx-auto "
     >
-      <p className=" ml-[10%] text-Onyx font-semibold mb-4 max-md:ml-0 min-w-[200px] ">Brows By Categorie's</p>
+      <p className=" ml-[10%] text-Onyx font-semibold mb-4 max-md:ml-0 min-w-[200px] ">
+        Brows By Categorie's
+      </p>
       <div className=" h-fit ml-[10%] max-md:ml-0 ">
         <div className=" flex flex-col gap-2  text-left text-Onyx text-lg max-md:flex-row max-md:text-sm justify-between sticky ">
           <div
@@ -342,54 +412,63 @@ function FilterMenu() {
   );
 }
 function ProductsContainer(props) {
-  //implement inifinity scroll
-
-  const [items, setItems] = useState([]);
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [index, setIndex] = useState(10);
-
-  const fetchData = useCallback(async () => {
-    if (isLoading) return;
-    setIsLoading(true);
-    await (
-      await fetch(`https://fakestoreapi.com/products?limit=${index}`)
-    )
-      .json()
-      .then((items) => {
-        setItems(items);
-      })
-
-      .catch((err) => console.log(err));
-    setIndex((prevIndex) => prevIndex + 5);
-
-    setIsLoading(false);
-  }, [isLoading, index]);
-
-  //when user reach end of page render some products
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const { scrollTop, clientHeight, scrollHeight  } =
-        document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight/2 ) {
-        fetchData();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [fetchData]);
-
-  //end of implementation/
   return (
-    <div className="absolute top-32 border-x-2 border-Onyx right-[2.3%] max-md:right-0 w-[77%]  h-fit">
-      <div>
-        {(items.length > props.products.length ? items : props.products).map((x) => (
-          <div key={x.id}>{x.price}</div>
+    <div className="absolute top-32 right-[2.3%] max-md:right-0 w-[77%]  h-fit">
+      <div className="relative w-full h-fit flex flex-row flex-wrap gap-5 justify-around">
+        {props.products.map((x) => (
+          <div key={x.id}>
+            <div className="relative h-[420px] w-72 bg-white rounded-md overflow-hidden ">
+              <div name="imageContainer" className="bg-white w-full h-40 ">
+                <img
+                  src={x.image}
+                  className="h-[160px] bg-contain mx-auto"
+                  alt=""
+                />
+              </div>
+              <div className="absolute w-full bg-Platinum drop-shadow-sm shadow-black h-[260px] bottom-0 rounded-lg">
+                <div className="h-full w-full bg-Onyx/20 flex flex-col rounded-md">
+                  <div
+                    name="ratingContainer"
+                    className="ml-auto mr-3 mt-3 w-fit order-0"
+                  >
+                    <div className=" flex flex-row ">
+                      <p className="inline-block text-xl  text-Onyx font-semibold">
+                        {x.rating.rate}
+                      </p>
+                      <div className=" inline-block w-6 h-6 bg-contain bg-no-repeat bg-starIcone "></div>
+                    </div>
+                    <p className=" text-xs text-Onyx/50 font-semibold">
+                      {x.rating.count}
+                    </p>
+                  </div>
+                  <div name="titleContainer " className="order-1">
+                    <div className=" w-64 text-center mx-auto  h-14 text-Onyx font-semibold mt-2">
+                      <p className="my-auto line-clamp-2">{x.title}</p>
+                    </div>
+                  </div>
+                  <div
+                    name="valueContainer"
+                    className="order-2 text-Onyx font-semibold mt-1"
+                  >
+                    <div className="flex flex-row justify-evenly w-64 mx-auto text-xl">
+                      <p className="">price</p>
+                      {x.price}$
+                    </div>
+                  </div>
+                  <div
+                    name="addToCartContainer"
+                    className="order-3 mt-10 mx-auto"
+                  >
+                    <div className="relative w-64 h-14 bg-Onyx text-Platinum rounded-md text-center cursor-pointer">
+                      <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        Add to Cart
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </div>
