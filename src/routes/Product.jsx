@@ -4,6 +4,7 @@ import { useLoaderData } from "react-router-dom";
 export default function ProductPage() {
   const products = useLoaderData();
   const [filtredProducts, setFiltredProducts] = useState(products);
+  const [sortBy, setSortBy] = useState("lower-value");
   //#region
 
   //implement inifinity scroll
@@ -68,10 +69,13 @@ export default function ProductPage() {
         </div>
         {/** products container */}
         <div className="relative h-fit w-full">
-          <SortMenu></SortMenu>
+          <SortMenu sort={sortBy} setSort={setSortBy}></SortMenu>
           <FilterMenu
             products={items.length > products.length ? items : products}
             setProduct={setFiltredProducts}
+            filtredProducts={filtredProducts}
+            sort={sortBy}
+            setSort={setSortBy}
           ></FilterMenu>
           <ProductsContainer products={filtredProducts}></ProductsContainer>
         </div>
@@ -90,7 +94,7 @@ function Slider() {
     " bg-slider5",
   ];
   useEffect(() => {
-    const interval = setInterval(() => {
+    const intervalSilerd = setInterval(() => {
       setIndex(++index);
       if (index > 4) {
         setIndex(0);
@@ -98,7 +102,7 @@ function Slider() {
       console.log(index);
     }, 5000);
     return () => {
-      clearInterval(interval);
+      clearInterval(intervalSilerd);
     };
   });
   return (
@@ -197,17 +201,7 @@ function Slider() {
     </div>
   );
 }
-// function FilterLine() {
-//   return (
-//     <div className="z-10 w-[95%] mt-10 max-md:mt-2 relative m-auto">
-//       <div className="text-xl font-mono text-Onyx max-md:text-lg"> sortBy</div>
-//       <div className="bg-Onyx w-full h-[3px]"></div>
-//       <SortMenu></SortMenu>
-//     </div>
-//   );
-// }
-function SortMenu() {
-  const [sortBy, setSortBy] = useState("A-Z");
+function SortMenu(props) {
   return (
     <div className=" absolute w-[77%]  top-[52px] max-mobile:top-36 max-md:top-40 right-[2.3%] max-md:right-0 max-md:left-1/2 max-md:-translate-x-1/2 max-md:w-[90%]">
       <div
@@ -217,36 +211,48 @@ function SortMenu() {
         }
       >
         <div
-          className="relative hover:bg-orange bg-Onyx/20 rounded-md w-full p-5 max-md:p-2 flex flex-row cursor-pointer justify-between"
+          className={
+            "relative  bg-Onyx/20 rounded-md w-full p-5 max-md:p-2 flex flex-row cursor-pointer justify-between" +
+            (props.sort === "low-rate" ? " bg-gold-metalic" : "")
+          }
           onClick={(e) => {
-            setSortBy(e.target.innerText);
+            props.setSort(e.target.innerText);
           }}
         >
-          <p className="my-auto">A-Z</p>
-          <div className=" w-6 h-6 bg-sortaz bg-no-repeat my-auto"></div>
+          <p className="my-auto">low-rate</p>
+          <div className=" w-6 h-6 bg-sortLowRate bg-no-repeat my-auto"></div>
         </div>
         <div
-          className="relative hover:bg-orange bg-Onyx/20 rounded-md w-full p-5 max-md:p-2 flex flex-row cursor-pointer justify-between "
+          className={
+            "relative  bg-Onyx/20 rounded-md w-full p-5 max-md:p-2 flex flex-row cursor-pointer justify-between" +
+            (props.sort === "high-rate" ? " bg-gold-metalic" : "")
+          }
           onClick={(e) => {
-            setSortBy(e.target.innerText);
+            props.setSort(e.target.innerText);
           }}
         >
-          <p className="my-auto">Z-A</p>
-          <div className=" w-6 h-6 bg-sortza bg-no-repeat my-auto"></div>
+          <p className="my-auto">high-rate</p>
+          <div className=" w-6 h-6 bg-starIcone bg-no-repeat my-auto"></div>
         </div>
         <div
-          className="relative hover:bg-orange bg-Onyx/20 rounded-md w-full p-5 max-md:p-2 flex flex-row cursor-pointer justify-between"
+          className={
+            "relative  bg-Onyx/20 rounded-md w-full p-5 max-md:p-2 flex flex-row cursor-pointer justify-between" +
+            (props.sort === "lower-value" ? " bg-gold-metalic" : "")
+          }
           onClick={(e) => {
-            setSortBy(e.target.innerText);
+            props.setSort(e.target.innerText);
           }}
         >
           <p className="my-auto">lower-value</p>
           <div className=" w-6 h-6 bg-sortdown bg-no-repeat my-auto"></div>
         </div>
         <div
-          className="relative hover:bg-orange bg-Onyx/20 rounded-md w-full p-5 max-md:p-2 flex flex-row cursor-pointer justify-between"
+          className={
+            "relative  bg-Onyx/20 rounded-md w-full p-5 max-md:p-2 flex flex-row cursor-pointer justify-between" +
+            (props.sort === "higher-value" ? " bg-gold-metalic" : "")
+          }
           onClick={(e) => {
-            setSortBy(e.target.innerText);
+            props.setSort(e.target.innerText);
           }}
         >
           <p className="my-auto">higher-value</p>
@@ -261,73 +267,80 @@ function FilterMenu(props) {
   const [womensProducts, setWomensProducts] = useState([]);
   const [jeweleryProducts, setJeweleryProducts] = useState([]);
   const [electronicsProducts, setElectronicsProducts] = useState([]);
-  const [filters, setFilters] = useState({
-    "men's clothing": false,
-    "women's clothing": false,
-    jewelery: false,
-    electronics: false,
-  });
-
+  const [allProducts, setAllProdcuts] = useState([]);
+  const [filters, setFilters] = useState("All");
+  const sortProducts = (/**@type {[]}*/ productList) => {
+    if (props.sort === "lower-value") {
+      props.setProduct(
+        productList.sort((a, b) => {
+          if (a.price < b.price) {
+            return -1;
+          } else return 1;
+        })
+      );
+    } else if (props.sort === "higher-value") {
+      props.setProduct(
+        productList.sort((a, b) => {
+          if (a.price > b.price) {
+            return -1;
+          } else return 1;
+        })
+      );
+    } else if (props.sort === "low-rate") {
+      props.setProduct(
+        productList.sort((a, b) => {
+          if (a.rating.rate < b.rating.rate) {
+            return -1;
+          } else return 1;
+        })
+      );
+    } else if (props.sort === "high-rate") {
+      props.setProduct(
+        productList.sort((a, b) => {
+          if (a.rating.rate > b.rating.rate) {
+            return -1;
+          } else return 1;
+        })
+      );
+    }
+  };
   const handleCategoriesFilters = () => {
-    if (filters["men's clothing"]) {
+    if (filters === "men's clothing") {
       setMenProducts(
         props.products.filter((product) => {
-          return product.category==="men's clothing";
+          return product.category === "men's clothing";
         })
       );
-    } else {
-      setMenProducts([]);
-    }
-    if (filters["women's clothing"]) {
+      sortProducts(menProducts);
+    } else if (filters === "women's clothing") {
       setWomensProducts(
         props.products.filter((product) => {
-          return product.category==="women's clothing";
+          return product.category === "women's clothing";
         })
       );
-    } else {
-      setWomensProducts([]);
-    }
-    if (filters.jewelery) {
+      sortProducts(womensProducts);
+    } else if (filters === "jewelery") {
       setJeweleryProducts(
         props.products.filter((product) => {
-          return product.category==="jewelery";
+          return product.category === "jewelery";
         })
       );
-    } else {
-      setJeweleryProducts([]);
-    }
-    if (filters.electronics) {
+      sortProducts(jeweleryProducts);
+    } else if (filters === "electronics") {
       setElectronicsProducts(
         props.products.filter((product) => {
-          return product.category==="electronics";
+          return product.category === "electronics";
         })
       );
-    } else {
-      setElectronicsProducts([]);
-    }
-    
-    if (
-      !filters["men's clothing"] &&
-      !filters["women's clothing"] &&
-      !filters.electronics &&
-      !filters.jewelery
-    ) {
-      props.setProduct(props.products);
-      console.log('allafalse')
-    } else {
-      const temp=[]
-      const concatArray =temp.concat(menProducts,
-        womensProducts,
-        jeweleryProducts,
-        electronicsProducts
-      );
-      props.setProduct(concatArray);
+      sortProducts(electronicsProducts);
+    } else if (filters === "All") {
+      setAllProdcuts([...props.products]);
+      sortProducts(allProducts);
     }
   };
   useEffect(() => {
-    const interval = setInterval(handleCategoriesFilters, 100);
-    return () => clearInterval(interval);
-  });
+    handleCategoriesFilters()
+  },[props.sort,filters,props.products]);
   return (
     <div
       name="container"
@@ -340,14 +353,24 @@ function FilterMenu(props) {
         <div className=" flex flex-col gap-2  text-left text-Onyx text-lg max-md:flex-row max-md:text-sm justify-between sticky ">
           <div
             className={
-              "relative flex flex-row justify-between h-fit font-semibold p-5 rounded-lg  cursor-pointer max-mobile:flex-col max-mobile:rounded-md max-mobile:p-2 max-md:w-full" +
-              (filters["men's clothing"] ? " bg-metal/30" : " bg-Onyx/10")
+              "relative  justify-between h-fit font-semibold p-5 rounded-lg  cursor-pointer max-mobile:flex-col max-mobile:rounded-md max-mobile:p-2 max-mobile:h-16 max-md:h-24" +
+              (filters === "All" ? " bg-metal/30" : " bg-Onyx/10")
             }
             onClick={() => {
-              setFilters({
-                ...filters,
-                "men's clothing": filters["men's clothing"] ? false : true,
-              });
+              setFilters("All");
+            }}
+          >
+            <p className="my-auto  max-mobile:top-16 max-md:mt-5 ml-2 line-clamp-1 left-1/2 max-md:-translate-x-1/2">
+              All
+            </p>
+          </div>
+          <div
+            className={
+              "relative flex flex-row justify-between h-fit font-semibold p-5 rounded-lg  cursor-pointer max-mobile:flex-col max-mobile:rounded-md max-mobile:p-2 max-md:w-full" +
+              (filters === "men's clothing" ? " bg-metal/30" : " bg-Onyx/10")
+            }
+            onClick={() => {
+              setFilters("men's clothing");
             }}
           >
             <p className="my-auto  max-md:absolute max-mobile:top-16 max-md:top-[75px] line-clamp-1 left-1/2 max-md:-translate-x-1/2">
@@ -358,13 +381,10 @@ function FilterMenu(props) {
           <div
             className={
               "relative flex flex-row justify-between h-fit  font-semibold p-5 rounded-lg  cursor-pointer  max-mobile:flex-col max-mobile:rounded-md  max-mobile:p-2 max-md:w-full" +
-              (filters["women's clothing"] ? " bg-metal/30" : " bg-Onyx/10")
+              (filters === "women's clothing" ? " bg-metal/30" : " bg-Onyx/10")
             }
             onClick={() => {
-              setFilters({
-                ...filters,
-                "women's clothing": filters["women's clothing"] ? false : true,
-              });
+              setFilters("women's clothing");
             }}
           >
             <p className="my-auto  max-md:absolute max-mobile:top-16 max-md:top-[75px] line-clamp-1 left-1/2 max-md:-translate-x-1/2">
@@ -375,13 +395,10 @@ function FilterMenu(props) {
           <div
             className={
               "relative flex flex-row justify-between  h-fit font-semibold p-5 rounded-lg  cursor-pointer max-mobile:flex-col max-mobile:rounded-md  max-mobile:p-2 max-md:w-full" +
-              (filters["jewelery"] ? " bg-metal/30" : " bg-Onyx/10")
+              (filters === "jewelery" ? " bg-metal/30" : " bg-Onyx/10")
             }
             onClick={() => {
-              setFilters({
-                ...filters,
-                jewelery: filters["jewelery"] ? false : true,
-              });
+              setFilters("jewelery");
             }}
           >
             <p className="my-auto  max-md:absolute max-mobile:top-16 max-md:top-[75px] line-clamp-1 left-1/2 max-md:-translate-x-1/2">
@@ -392,13 +409,10 @@ function FilterMenu(props) {
           <div
             className={
               "relative flex flex-row justify-between  h-fit font-semibold p-5 rounded-lg  cursor-pointer  max-mobile:flex-col max-mobile:rounded-md max-mobile:p-2 max-md:w-full" +
-              (filters["electronics"] ? " bg-metal/30" : " bg-Onyx/10")
+              (filters === "electronics" ? " bg-metal/30" : " bg-Onyx/10")
             }
             onClick={() => {
-              setFilters({
-                ...filters,
-                electronics: filters["electronics"] ? false : true,
-              });
+              setFilters("electronics");
             }}
           >
             <p className="my-auto  max-md:absolute max-mobile:top-16 max-md:top-[75px] line-clamp-1 left-1/2 max-md:-translate-x-1/2">
@@ -413,15 +427,15 @@ function FilterMenu(props) {
 }
 function ProductsContainer(props) {
   return (
-    <div className="absolute top-32 right-[2.3%] max-md:right-0 w-[77%]  h-fit">
+    <div className="absolute top-32 right-[2.3%] max-md:right-0 w-[77%] max-lg:top-40 max-md:top-56 h-fit max-md:w-full">
       <div className="relative w-full h-fit flex flex-row flex-wrap gap-5 justify-around">
         {props.products.map((x) => (
           <div key={x.id}>
-            <div className="relative h-[420px] w-72 bg-white rounded-md overflow-hidden ">
-              <div name="imageContainer" className="bg-white w-full h-40 ">
+            <div className="relative h-[420px] w-72 max-md:w-64 bg-white rounded-md overflow-hidden ">
+              <div name="imageContainer" className="bg-white w-full h-40 max-md:h-32 ">
                 <img
                   src={x.image}
-                  className="h-[160px] bg-contain mx-auto"
+                  className="h-[130px] max-md:mt-2 mt-4 bg-contain mx-auto"
                   alt=""
                 />
               </div>
@@ -442,7 +456,7 @@ function ProductsContainer(props) {
                     </p>
                   </div>
                   <div name="titleContainer " className="order-1">
-                    <div className=" w-64 text-center mx-auto  h-14 text-Onyx font-semibold mt-2">
+                    <div className=" w-64 text-center mx-auto max-md:w-52 h-14 text-Onyx font-semibold mt-2">
                       <p className="my-auto line-clamp-2">{x.title}</p>
                     </div>
                   </div>
@@ -459,7 +473,7 @@ function ProductsContainer(props) {
                     name="addToCartContainer"
                     className="order-3 mt-10 mx-auto"
                   >
-                    <div className="relative w-64 h-14 bg-Onyx text-Platinum rounded-md text-center cursor-pointer">
+                    <div className="relative w-64 max-md:w-56 h-14 bg-Onyx text-Platinum rounded-md text-center cursor-pointer">
                       <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                         Add to Cart
                       </p>

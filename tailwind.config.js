@@ -76,7 +76,7 @@ export default {
         leftArrow: "url('/src/assets/leftarrow.svg')",
         rightArrow: "url('/src/assets/rightarrow.svg')",
         cartIcone: "url('/src/assets/cartIcone.svg')",
-        sortaz: "url('/src/assets/sort/sort-a-z.svg')",
+        sortLowRate: "url('/src/assets/sort/lowRateStar.svg')",
         sortza: "url('/src/assets/sort/sort-z-a.svg')",
         sortdown: "url('/src/assets/sort/sortdown.svg')",
         sortup: "url('/src/assets/sort/sortup.svg')",
